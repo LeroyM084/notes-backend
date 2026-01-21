@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from "@nestjs/common";
-import { LoginDTO, UserLoggerPresenter } from "./auth.types";
-import { register } from "module";
+import { LoginDTO, RegisterDTO } from "./types/auth.dto";
+import { UserLoggerPresenter } from "./types/auth.presenter";
 import { plainToInstance } from "class-transformer";
 
 @Controller("auth")
@@ -18,7 +18,7 @@ export class AuthController {
     }
     @Post("register")
     @HttpCode(HttpStatus.OK)
-    register(@Body() body: any){
+    register(@Body() body: RegisterDTO){
         return null;
     }
 }
