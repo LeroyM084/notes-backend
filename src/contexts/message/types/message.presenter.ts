@@ -7,6 +7,8 @@ export class MessageLoggerPresenter {
     @IsString()
     username: string
 
-    
+    @Expose()
+    @IsString()
+    content: string
 
 }
