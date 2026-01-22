@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { ResourceGroupeController } from "./resources.controller";
+import { ResourceGroupeController } from "./resources.groupe.controller";
 
 @Module({
     imports: [],
