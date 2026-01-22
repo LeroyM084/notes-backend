@@ -10,14 +10,14 @@ export class ConversationRepository {
         private readonly conversationRepository: Repository<ConversationEntity>,
     ) { }
 
-    async createConversation(): Promise<ConversationEntity> {
+    async createConversation(title: string): Promise<ConversationEntity> {
         const entity = new ConversationEntity();
+        entity.name = title
         return this.conversationRepository.save(entity);
     }
 
     async findConversationById(id: string): Promise<ConversationEntity | null> {
         const entity = await this.conversationRepository.findOne({ where: { id } });
-
         return entity;
     }
 
