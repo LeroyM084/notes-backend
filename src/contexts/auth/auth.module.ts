@@ -5,6 +5,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserCredentialsEntity } from "./entities/user_credentials.entities";
 import { AUTH_REPOSITORY } from "./auth.repository.interface";
 import { AuthRepository } from "./auth.repository";
+import { PASSWORD_HASHER } from "./interface/password-hasher.interface";
+import { PasswordHasherService } from "./password-hasher.service";
 
 @Module({
     imports: [TypeOrmModule.forFeature([
@@ -12,7 +14,8 @@ import { AuthRepository } from "./auth.repository";
     ])],
     controllers: [AuthController],
     providers: [AuthService, 
-        {provide: AUTH_REPOSITORY, useClass: AuthRepository}
+        {provide: AUTH_REPOSITORY, useClass: AuthRepository},
+        {provide: PASSWORD_HASHER, useClass: PasswordHasherService}
     ],
 })
 export class AuthModule {}

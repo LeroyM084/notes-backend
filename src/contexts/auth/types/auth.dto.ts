@@ -8,8 +8,6 @@ export class LoginDTO {
 }
 
 export class RegisterDTO {
-    @IsString()
-    username: string
     @IsEmail()
     email: string
     @IsStrongPassword()

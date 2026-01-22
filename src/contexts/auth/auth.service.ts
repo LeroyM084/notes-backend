@@ -1,9 +1,47 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { AUTH_REPOSITORY, IAuthRepository } from './auth.repository.interface';
-
+import { UserCredentialsEntity } from './entities/user_credentials.entities';
+import { LoginDTO, RegisterDTO } from './types/auth.dto';
+import { PASSWORD_HASHER} from './interface/password-hasher.interface';
+import { PasswordHasherService } from './password-hasher.service';
+import * as jwt from 'jsonwebtoken';
+import { JWT_SERVICE, JWTServiceInterface } from './interface/jwt.interface';
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(AUTH_REPOSITORY) private readonly authRepository: IAuthRepository
+    @Inject(AUTH_REPOSITORY) private readonly authRepository: IAuthRepository,
+    @Inject(PASSWORD_HASHER) private readonly passwordHasher: PasswordHasherService,
+    @Inject(JWT_SERVICE) private readonly jwtService: JWTServiceInterface,
   ) {}
+
+  async register (dto : RegisterDTO): Promise<void> {
+    const emailExists =  await this.authRepository.checkEmailExists(dto.email);
+    if (emailExists) {
+      throw new Error('Email already in use');
+    }
+    const hashedPassword = await this.passwordHasher.hash(dto.password);
+    const userCredentials = new UserCredentialsEntity();
+    userCredentials.email = dto.email;
+
+    userCredentials.passwordHash = hashedPassword;
+    await this.authRepository.createCredentials(userCredentials);
+
+  }
+
+  async login (dto: LoginDTO): Promise<object | null> {
+    const userCredentials = await this.authRepository.findCredentialsByEmail(dto.email);
+    if (!userCredentials) {
+      return null;
+    }
+
+    if (!await this.passwordHasher.compare(dto.password, userCredentials.passwordHash)) {
+      return null;
+    }
+
+    const acces_token = await this.jwtService.generateToken({ userId: userCredentials.id });
+    const refresh_token = await this.jwtService.generateToken({ userId: userCredentials.id }, '7d');
+
+    return { acces_token, refresh_token };
+  }
 }
+

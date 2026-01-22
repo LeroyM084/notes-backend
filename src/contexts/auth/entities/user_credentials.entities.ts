@@ -16,7 +16,6 @@ export class UserCredentialsEntity {
     @CreateDateColumn({ name: "created_at" })
     createdAt: Date;
 
-    @CreateDateColumn({ name: "conversations" })
-    conv
+    
 }
 
