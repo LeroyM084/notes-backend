@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { UserProfileEntity } from "./user_profile.entities";
 
 @Entity("user_credentials")
 export class UserCredentialsEntity {
@@ -13,12 +14,7 @@ export class UserCredentialsEntity {
     @Column({name: "email", type: "varchar", length: 255})
     email: string;
 
-    @Column({ name: "username", type: "varchar", length: 100 })
-    username: string;
-
     @CreateDateColumn({ name: "created_at" })
     createdAt: Date;
-
-    
 }
 

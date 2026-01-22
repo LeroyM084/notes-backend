@@ -6,12 +6,13 @@ import { PASSWORD_HASHER} from './interface/password-hasher.interface';
 import { PasswordHasherService } from './password-hasher.service';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SERVICE, JWTServiceInterface } from './interface/jwt.interface';
+import { JWTService } from './jwt.service';
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(AUTH_REPOSITORY) private readonly authRepository: IAuthRepository,
     @Inject(PASSWORD_HASHER) private readonly passwordHasher: PasswordHasherService,
-    @Inject(JWT_SERVICE) private readonly jwtService: JWTServiceInterface,
+    @Inject(JWT_SERVICE) private readonly jwtService: JWTService,
   ) {}
 
   async register (dto : RegisterDTO): Promise<boolean | string> {
@@ -22,7 +23,6 @@ export class AuthService {
     const hashedPassword = await this.passwordHasher.hash(dto.password);
     const userCredentials = new UserCredentialsEntity();
     userCredentials.email = dto.email;
-    userCredentials.username = dto.username;
     userCredentials.passwordHash = hashedPassword;
     await this.authRepository.createCredentials(userCredentials);
 
