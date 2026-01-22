@@ -14,7 +14,7 @@ export class RscGroupeEntity {
 
     @ManyToMany(() => UserCredentialsEntity)
     @JoinTable({
-        name: "conversation_participants",
+        name: "conversation_groupe_participants",
         joinColumn: { name: "conversation_id", referencedColumnName: "id" },
         inverseJoinColumn: { name: "user_id", referencedColumnName: "id" }
     })
