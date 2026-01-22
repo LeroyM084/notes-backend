@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { MESSAGE_REPOSITORY, IMessageRepository } from './message.repository.interface';
 
 @Injectable()
 export class MessageService {
-  getMessage(id: string): string {
-    console.log('Fetching message for id:', id);
-    return `Message with id ${id}`;
-  }
+  constructor(
+    @Inject(MESSAGE_REPOSITORY) private readonly messageRepository: IMessageRepository
+  ) {}
 }

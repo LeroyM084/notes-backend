@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { CONVERSATION_REPOSITORY, IConversationRepository } from './conversation.repository.interface';
 
 @Injectable()
 export class ConversationService {
-  getConversation(id: string): string {
-    console.log('Fetching conversation for id:', id);
-    return `Conversation with id ${id}`;
-  }
+  constructor(
+    @Inject(CONVERSATION_REPOSITORY) private readonly conversationRepository: IConversationRepository
+  ) {}
 }
