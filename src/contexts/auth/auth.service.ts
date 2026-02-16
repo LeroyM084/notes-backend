@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, ExecutionContext } from '@nestjs/common';
 import { AUTH_REPOSITORY, IAuthRepository } from './auth.repository.interface';
 import { UserCredentialsEntity } from './entities/user_credentials.entities';
 import { LoginDTO, RegisterDTO } from './types/auth.dto';
@@ -7,6 +7,7 @@ import { PasswordHasherService } from './password-hasher.service';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SERVICE, JWTServiceInterface } from './interface/jwt.interface';
 import { JWTService } from './jwt.service';
+import { DomainError } from 'src/core/errors/domain-error';
 @Injectable()
 export class AuthService {
   constructor(
@@ -34,11 +35,11 @@ export class AuthService {
   async login (dto: LoginDTO): Promise<object | null> {
     const userCredentials = await this.authRepository.findCredentialsByEmail(dto.email);
     if (!userCredentials) {
-      return null;
+      return null
     }
 
     if (!await this.passwordHasher.compare(dto.password, userCredentials.passwordHash)) {
-      return null;
+      return null
     }
 
     const acces_token = await this.jwtService.generateToken({ userCredentials});
@@ -46,5 +47,8 @@ export class AuthService {
 
     return { acces_token, refresh_token };
   }
+
+ 
 }
+
 
