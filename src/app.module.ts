@@ -20,11 +20,12 @@ import { join } from 'path';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'mysql',
-        host: config.get<string>('DB_HOST'),
-        port: config.get<number>('DB_PORT'),
-        username: config.get<string>('DB_USERNAME'),
-        password: config.get<string>('DB_PASSWORD'),
-        database: config.get<string>('DB_DATABASE'),
+        host: config.get<string>('DB_HOST') || 'localhost',
+        port: config.get<number>('DB_PORT') || 3307,
+        username: config.get<string>('DB_USERNAME') || 'user',
+        password: config.get<string>('DB_PASSWORD') || 'password',
+        database: config.get<string>('DB_NAME') || 'backend_db',
+        driver: require('mysql2'),
         synchronize: config.get<string>('DB_SYNCHRONIZE') === 'true',
         logging: config.get<string>('DB_LOGGING') === 'true',
 
